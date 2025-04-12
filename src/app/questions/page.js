@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { Search } from 'lucide-react';
 
 export default function ForumsPage() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState('');
   const [actionInProgress, setActionInProgress] = useState({ type: null, id: null });
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Function to fetch all questions
   const fetchQuestions = async () => {
@@ -34,7 +36,7 @@ export default function ForumsPage() {
       }
     };
 
-    fetchUserData();
+    // fetchUserData();
     fetchQuestions();
   }, []);
 
@@ -82,6 +84,11 @@ export default function ForumsPage() {
     }
   };
 
+  // Filter questions based on search term
+  const filteredQuestions = questions.filter(question => 
+    question.questionTitle.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Loading state
   if (loading && questions.length === 0) {
     return (
@@ -96,7 +103,7 @@ export default function ForumsPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Community Forums</h1>
         <Link 
           href="/questions/ask" 
@@ -106,14 +113,47 @@ export default function ForumsPage() {
         </Link>
       </div>
 
-      {questions.length === 0 ? (
+      {/* Search Bar */}
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Search questions by title"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {filteredQuestions.length === 0 ? (
         <div className="bg-white rounded-lg shadow p-8 text-center">
-          <p className="text-gray-500">No questions have been asked yet.</p>
-          <p className="mt-2 text-gray-600">Be the first to ask a question!</p>
+          {questions.length === 0 ? (
+            <>
+              <p className="text-gray-500">No questions have been asked yet.</p>
+              <p className="mt-2 text-gray-600">Be the first to ask a question!</p>
+            </>
+          ) : (
+            <>
+              <p className="text-gray-500">No questions match your search.</p>
+              <p className="mt-2 text-gray-600">Try a different search term or browse all questions.</p>
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm('')}
+                  className="mt-4 text-blue-600 hover:text-blue-800"
+                >
+                  Clear search
+                </button>
+              )}
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-6">
-          {questions.map(q => (
+          {filteredQuestions.map(q => (
             <div key={q.id} className="bg-white rounded-lg shadow overflow-hidden">
               <div className="p-6">
                 <Link href={`/questions/${q.id}`}>

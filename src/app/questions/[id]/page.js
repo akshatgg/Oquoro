@@ -28,21 +28,20 @@ export default function QuestionDetailsPage() {
     }
   };
 
-  // Initial data load
-  useEffect(() => {
-    const initializeData = async () => {
-      await fetchQuestionData();
-      
-      try {
-        const auth = await axios.get('/api/auth/me');
-        setUserId(auth.data.id);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+ 
+useEffect(() => {
+  const fetchUserAndQuestionData = async () => {
+    try {
     
-    initializeData();
-  }, [id]);
+      
+      await fetchQuestionData();
+    } catch (error) {
+      console.error('Error in initial data load:', error);
+    }
+  };
+
+  fetchUserAndQuestionData();
+}, [id]); // Re-fetch if the question ID changes
 
   // Handle voting
   const handleVote = async (type) => {

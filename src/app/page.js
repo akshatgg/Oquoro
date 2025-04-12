@@ -8,6 +8,9 @@ import axios from "axios";
 export default function Home() {
   // State for questions fetched from API
   const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   // Sample stats data - these would come from your API in a real app
@@ -45,8 +48,31 @@ export default function Home() {
         setLoading(false);
       }
     };
-
+    const fetchAnswers= async () => {
+      try{
+        setLoading(true);
+        // Fetch answers from API
+          const res = await axios.get('/api/comments/answer');
+          setAnswers(res.data);
+          console.log('Fetched answers:', res.data);
+      }catch(err){
+        console.error('Error fetching questions:', err);
+      }finally {
+        setLoading(false);
+      }
+    }
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get('/api/auth/user');
+        setUsers(res.data);
+        console.log('Fetched users:', res.data);
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      }
+    }
+    fetchUsers();
     fetchQuestions();
+    fetchAnswers();
   }, []);
 
   return (
@@ -101,15 +127,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-blue-600">${questions.length}</div>
+              <div className="text-2xl font-bold text-blue-600">{questions.length}</div>
               <div className="text-gray-600">Questions</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-blue-600">{stats.answers.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-blue-600">{answers.length}</div>
               <div className="text-gray-600">Answers</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-blue-600">{stats.users.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-blue-600">{users.length}</div>
               <div className="text-gray-600">Users</div>
             </div>
             <div>
@@ -216,13 +242,11 @@ export default function Home() {
                     {popularTags.map(tag => (
                       <Link
                         key={tag.name}
-                        href={`/tags/${tag.name}`}
+                        href={`/`}
                         className="group flex justify-between items-center bg-gray-100 hover:bg-blue-100 px-3 py-1.5 rounded-md transition-colors"
                       >
                         <span className="text-gray-800 group-hover:text-blue-800">{tag.name}</span>
-                        <span className="ml-2 bg-gray-200 group-hover:bg-blue-200 text-gray-700 group-hover:text-blue-800 px-1.5 py-0.5 rounded-full text-xs">
-                          {tag.count}
-                        </span>
+                      
                       </Link>
                     ))}
                   </div>
@@ -230,16 +254,7 @@ export default function Home() {
               </div>
 
               {/* Call to Action */}
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-blue-900 mb-2">Join the community</h3>
-                <p className="text-blue-800 mb-4">Get unstuck by asking questions, learning from others, and sharing your knowledge</p>
-                <Link
-                  href="/signup"
-                  className="block text-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
-                >
-                  Create an account
-                </Link>
-              </div>
+            
             </div>
           </div>
         </div>
