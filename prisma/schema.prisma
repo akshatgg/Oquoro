@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name String
+  email     String     @unique
+  password  String
+  about     String?
+  tags      String[]   @default([])
+  joinedOn  DateTime   @default(now())
+  questions Question[]
+  answers   Answer[]
+  otps      Otp[] // ✅ This line fixes the missing back-relation
+  verified  Boolean    @default(false)
+
+  @@map("users")
+}
+
+model Question {
+  id            String   @id @default(uuid())
+  questionTitle String
+  questionBody  String
+  questionTags  String[]
+  noOfAnswers   Int      @default(0)
+  upVote        String[] @default([])
+  downVote      String[] @default([])
+  userPosted    String
+  userId        String
+  askedOn       DateTime @default(now())
+  answers       Answer[]
+  author        User     @relation(fields: [userId], references: [id])
+
+  @@map("questions")
+}
+
+model Answer {
+  id           String   @id @default(uuid())
+  answerBody   String
+  userAnswered String
+  userId       String
+  answeredOn   DateTime @default(now())
+  questionId   String
+  question     Question @relation(fields: [questionId], references: [id],onDelete: Cascade)
+  author       User     @relation(fields: [userId], references: [id])
+
+  @@map("answers")
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  otp       String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  used      Boolean  @default(false)
+
+  @@map("otps")
+}
