@@ -12,6 +12,7 @@
   <a href="#features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#installation">Installation</a> •
+  <a href="#environment-setup">Environment Setup</a> •
   <a href="#api-routes">API Routes</a> •
   <a href="#screenshots">Screenshots</a> •
   <a href="#contributing">Contributing</a> •
@@ -27,6 +28,7 @@ DiscussCode is a developer-focused discussion platform that combines the best el
 - **Question & Answer System** - Post questions and get answers from the community
 - **Rich Discussion Threads** - Support for nested comments and discussions
 - **User Authentication** - Secure login/signup with JWT
+- **Email Verification** - OTP-based email verification for new accounts
 - **User Profiles** - View user contributions and activity
 - **Markdown Support** - Rich text formatting for questions and answers
 - **Responsive Design** - Works seamlessly on desktop and mobile devices
@@ -39,6 +41,7 @@ DiscussCode is a developer-focused discussion platform that combines the best el
 - **Backend**: Next.js API Routes
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: JWT (JSON Web Tokens)
+- **Email Service**: Node Mailer for OTP verification
 - **Deployment**: Vercel (or your preferred platform)
 
 ## 📁 Project Structure
@@ -59,8 +62,8 @@ DiscussCode is a developer-focused discussion platform that combines the best el
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/discusscode.git
-   cd discusscode
+   git clone https://github.com/akshatgg/Oquoro.git
+   cd Oquoro
    ```
 
 2. **Install dependencies**
@@ -72,11 +75,7 @@ DiscussCode is a developer-focused discussion platform that combines the best el
 
 3. **Set up environment variables**
    
-   Create a `.env.local` file with the following:
-   ```
-   DATABASE_URL="postgresql://username:password@localhost:5432/discusscode"
-   JWT_SECRET="your-jwt-secret"
-   ```
+   Create a `.env.local` file following the environment setup section below.
 
 4. **Set up the database**
    ```bash
@@ -92,12 +91,43 @@ DiscussCode is a developer-focused discussion platform that combines the best el
 
 6. **Open [http://localhost:3000](http://localhost:3000) in your browser**
 
+## 🔐 Environment Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```
+# Database Configuration
+DATABASE_URL=postgresql://postgres:Akshat%401234@localhost:5432/OQUORO
+
+# Email Service for OTP
+OPT_EMAIL=Itaxeazy@gmail.com
+OTP_PASS=fxeysnavgagjrgvv
+OTP_EXPIRY_MINUTES=10
+
+# JWT Authentication
+NEXT_JWT_SECRET_KEY=CBu2yG/+JoskSDem9mGNox6Hml3bcwZJDVd+CNQZ3zI=
+
+# Application URLs
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+API_URL="http://localhost:3000"
+
+# Environment
+NODE_ENV="development"
+```
+
+**Important Notes:**
+- For production, replace the placeholder credentials with your actual secure values
+- Make sure to set `NODE_ENV` to "production" for production deployments
+- The `DATABASE_URL` should be updated to match your PostgreSQL configuration
+- Generate a strong random string for `NEXT_JWT_SECRET_KEY` in production
+
 ## 🔌 API Routes
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/auth/login` | POST | User login |
 | `/api/auth/signup` | POST | User registration |
+| `/api/auth/verify-otp` | POST | Verify email OTP |
 | `/api/forums` | GET | Get all discussion forums |
 | `/api/forums` | POST | Create a new forum |
 | `/api/questions` | GET | Get all questions |
@@ -116,8 +146,6 @@ DiscussCode is a developer-focused discussion platform that combines the best el
   <img src="https://i.ibb.co/placeholder/400/320" alt="User Profile" width="45%"/>
 </div>
 
-
-
 ## 🤝 Contributing
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -134,12 +162,12 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-Your Name - [@AKSHAT GUPTA] - akshatg9636@gmail.com
+Akshat Gupta - [@AKSHAT_GUPTA](https://github.com/akshatgg) - akshatg9636@gmail.com
 
-Project Link: [https://github.com/akshatgg/Oquoro]
+Project Link: [https://github.com/akshatgg/Oquoro](https://github.com/akshatgg/Oquoro)
 
 ---
 
 <p align="center">
-  Made with ❤️ by your name
+  Made with ❤️ by Akshat Gupta
 </p>
