@@ -138,12 +138,16 @@ NODE_ENV="development"
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="https://i.ibb.co/placeholder/400/320" alt="Home Page" width="45%"/>
-  <img src="https://i.ibb.co/placeholder/400/320" alt="Question Detail" width="45%"/>
+  <img src="/public/home.png" alt="Home Page" width="45%"/>
+  <img src="/public/questions.png" alt="Question Detail" width="45%"/>
 </div>
 <div align="center">
-  <img src="https://i.ibb.co/placeholder/400/320" alt="Ask Question" width="45%"/>
-  <img src="https://i.ibb.co/placeholder/400/320" alt="User Profile" width="45%"/>
+  <img src="/public/askQuestion.png" alt="Ask Question" width="45%"/>
+  <img src="/public/user.png" alt="User Profile" width="45%"/>
+</div>
+<div align="center">
+  <img src="/public/Answer.png" alt="Discussion" width="45%"/>
+  
 </div>
 
 ## 🤝 Contributing
