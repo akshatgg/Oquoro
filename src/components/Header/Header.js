@@ -3,11 +3,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   // Check authentication status
   const checkAuthStatus = () => {
@@ -15,9 +16,14 @@ export default function Header() {
       .split("; ")
       .find((row) => row.startsWith("token="));
     setIsLoggedIn(!!token);
+    
+    // Redirect to login if trying to access Questions page without login
+    if (pathname === "/questions" && !token) {
+      router.push("/login");
+    }
   };
 
-  // Check auth status on component mount
+  // Check auth status on component mount and when pathname changes
   useEffect(() => {
     checkAuthStatus();
 
@@ -35,7 +41,7 @@ export default function Header() {
       window.removeEventListener("storage", checkAuthStatus);
       window.removeEventListener("authStateChanged", checkAuthStatus);
     };
-  }, []);
+  }, [pathname]);
 
   // Handle logout
   const handleLogout = async (e) => {
@@ -61,6 +67,14 @@ export default function Header() {
     }
   };
 
+  // Handle the questions link click to check auth before navigation
+  const handleQuestionsClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      router.push("/login");
+    }
+  };
+
   return (
     <header className="bg-white shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,12 +92,16 @@ export default function Header() {
               >
                 Home
               </Link>
+              
+              {/* Show Questions link for all users but handle auth check on click */}
               <Link
                 href="/questions"
+                onClick={handleQuestionsClick}
                 className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors"
               >
                 Questions
               </Link>
+              
               <Link
                 href="/users"
                 className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors"
